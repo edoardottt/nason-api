@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "642508ee-a143-4775-aae9-0476abb5a442",
+		"name": "nason-api-collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "nason-api-insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Latitude\": 13.34553,\n    \"Longitude\": 2.768,\n    \"State\": \"faulty\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				},
+				"description": "This request want to send information about a new drinking fountain."
+			},
+			"response": []
+		},
+		{
+			"name": "nason-api-update-state",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ID\": 4,\n    \"State\": \"usable\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				},
+				"description": "This request want to send information to update the state of a drinking fountain."
+			},
+			"response": []
+		},
+		{
+			"name": "nason-api-update-location",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ID\": 4,\n    \"Latitude\": 13.34553,\n    \"Longitude\": 2.768\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				},
+				"description": "This request want to send information to update the location of a drinking fountain."
+			},
+			"response": []
+		},
+		{
+			"name": "nason-api-delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ID\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				},
+				"description": "This request want to send information to delete a drinking fountain."
+			},
+			"response": []
+		},
+		{
+			"name": "nason-api-search",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Latitude\": 13.34553,\n    \"Longitude\": 2.768,\n    \"Radius\": 1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				},
+				"description": "This request want to send information to search the drinking fountains in a specific area."
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
