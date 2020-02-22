@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -28,23 +29,59 @@ func Server(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		respondingPost(w, r, input, db)
 	case "PUT":
-		fmt.Fprintf(w, "%s", method)
+		if input.State != "" {
+			respondingPutState(w, r, input, db)
+		} else {
+			respondingPutLocation(w, r, input, db)
+		}
 	case "DELETE":
-		fmt.Fprintf(w, "%s", method)
+		respondingDelete(w, r, input, db)
 	}
 }
 
 type responseOne struct {
-	Inserted bool
+	Done     bool
 	Fountain Fountain
 }
 
-func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
-	Err := updateDB(db, input.ID, input.State)
-	// row <- RETRIEVE SQL ROWS
-	res := responseOne{Err, Fountain{int(i), row.Latitude, row.Longitude, input.State}}
+func respondingDelete(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
+	Err, fountain := deleteDB(db, input.ID)
+	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
+}
+
+func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
+	Err := updateStateDB(db, input.ID, input.State)
+	fountain := selectDB(db, input.ID)
+	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
+	b, _ := json.Marshal(res)
+	fmt.Fprintf(w, "%s", string(b))
+}
+
+func respondingPutLocation(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
+	Err := updateLocationDB(db, input.ID, input.Latitude, input.Longitude)
+	fountain := selectDB(db, input.ID)
+	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
+	b, _ := json.Marshal(res)
+	fmt.Fprintf(w, "%s", string(b))
+}
+
+func updateLocationDB(db *sql.DB, ID int, lat float64, long float64) bool {
+	err := checkInputError(lat, long, "usable")
+	if err {
+		stmt, err := db.Prepare("UPDATE fountains SET location=POINT(?,?) WHERE id=?;")
+		var lat string = fmt.Sprintf("%f", lat)
+		var long string = fmt.Sprintf("%f", long)
+		_, err = stmt.Exec(lat, long, strconv.Itoa(ID))
+		if err != nil {
+			panic(err.Error())
+		}
+	} else {
+		fmt.Println("Bad Input.\n Latitude range: [-90,90]\n Longitude range: [-180,180]\n State: [usable,faulty].")
+		return false
+	}
+	return true
 }
 
 func respondingPost(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
@@ -73,26 +110,25 @@ func insertDB(db *sql.DB, lat float64, long float64, state string) (bool, int64)
 	return true, result
 }
 
-func selectDB(db *sql.DB) {
-	fountains, err := db.Query("SELECT id, ST_X(location), ST_Y(location),state FROM fountains")
+func selectDB(db *sql.DB, ID int) Fountain {
+	fountains, err := db.Query("SELECT id, ST_X(location), ST_Y(location),state FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
 	if err != nil {
 		panic(err.Error())
 	}
-	for fountains.Next() {
-		var fountain Fountain
-		err := fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
-		if err != nil {
-			panic(err.Error())
-		}
-		fmt.Println(fountain)
+	var fountain Fountain
+	fountains.Next()
+	err = fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
+	if err != nil {
+		panic(err.Error())
 	}
+	return fountain
 }
 
-func updateDB(db *sql.DB, id int, state string) bool {
+func updateStateDB(db *sql.DB, ID int, state string) bool {
 	err := checkInputError(0, 0, state)
 	if err {
 		stmt, err := db.Prepare("UPDATE fountains SET state = ? WHERE id=?;")
-		_, err = stmt.Exec(state, id)
+		_, err = stmt.Exec(state, ID)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -103,14 +139,19 @@ func updateDB(db *sql.DB, id int, state string) bool {
 	return true
 }
 
-func deleteDB(db *sql.DB, id int) *sql.Rows {
-	result, err := db.Query("SELECT FROM fountains WHERE id=" + string(id) + ";")
-	_, err = db.Query("DELETE FROM fountains WHERE id=" + string(id) + ";")
+func deleteDB(db *sql.DB, ID int) (bool, Fountain) {
+	fountains, err := db.Query("SELECT id, ST_X(location), ST_Y(location),state FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
+	_, err = db.Query("DELETE FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
 	if err != nil {
 		panic(err.Error())
 	} else {
-		fmt.Println("DELETED!")
-		return result
+		var fountain Fountain
+		fountains.Next()
+		err = fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
+		if err != nil {
+			return false, fountain
+		}
+		return true, fountain
 	}
 }
 
