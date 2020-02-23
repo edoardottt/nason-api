@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Latitude\": 13.34553,\n    \"Longitude\": 2.768,\n    \"State\": \"faulty\"\n}",
+					"raw": "{\n    \"Latitude\": 34.98,\n    \"Longitude\": -122.09,\n    \"State\": \"usable\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -52,7 +52,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ID\": 4,\n    \"State\": \"usable\"\n}",
+					"raw": "{\n    \"ID\": 26,\n    \"State\": \"faulty\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -85,7 +85,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ID\": 4,\n    \"Latitude\": 13.34553,\n    \"Longitude\": 2.768\n}",
+					"raw": "{\n    \"ID\": 26,\n    \"Latitude\": 1,\n    \"Longitude\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -118,7 +118,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ID\": 4\n}",
+					"raw": "{\n    \"ID\": 26\n}",
 					"options": {
 						"raw": {
 							"language": "json"

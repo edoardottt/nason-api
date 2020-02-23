@@ -21,20 +21,22 @@ func main() {
 //Server : main function delivering responses
 func Server(w http.ResponseWriter, r *http.Request) {
 	method := r.Method
-	var input Fountain = extractInput(w, r)
 	w.Header().Set("Content-Type", "application/json")
 	switch method {
 	case "GET":
-		fmt.Fprintf(w, "%s", method)
+		respondingGet(w, r, db)
 	case "POST":
+		var input Fountain = extractInput(w, r)
 		respondingPost(w, r, input, db)
 	case "PUT":
+		var input Fountain = extractInput(w, r)
 		if input.State != "" {
 			respondingPutState(w, r, input, db)
 		} else {
 			respondingPutLocation(w, r, input, db)
 		}
 	case "DELETE":
+		var input Fountain = extractInput(w, r)
 		respondingDelete(w, r, input, db)
 	}
 }
@@ -42,6 +44,31 @@ func Server(w http.ResponseWriter, r *http.Request) {
 type responseOne struct {
 	Done     bool
 	Fountain Fountain
+}
+
+type nearest struct {
+	Fountains []Fountain
+}
+
+type search struct {
+	Latitude  float64
+	Longitude float64
+	Radius    float64
+}
+
+func respondingGet(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	body, _ := ioutil.ReadAll(r.Body)
+	textBytes := []byte(body)
+	input := search{}
+	err := json.Unmarshal(textBytes, &input)
+	if err != nil {
+		panic(err)
+	}
+	Latitude, Longitude, Radius := input.Latitude, input.Longitude, input.Radius
+	var got []Fountain = searchNearest(db, Latitude, Longitude, Radius)
+	fountains := nearest{got}
+	b, _ := json.Marshal(fountains)
+	fmt.Fprintf(w, "%s", string(b))
 }
 
 func respondingDelete(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
@@ -122,6 +149,55 @@ func selectDB(db *sql.DB, ID int) Fountain {
 		panic(err.Error())
 	}
 	return fountain
+}
+
+func searchNearest(db *sql.DB, Latitude float64, Longitude float64, Radius float64) []Fountain {
+	err := checkInputError(Latitude, Longitude, "usable")
+	got := []Fountain{}
+	if err {
+		Latitude := fmt.Sprintf("%f", Latitude)
+		Longitude := fmt.Sprintf("%f", Longitude)
+		Radius := fmt.Sprintf("%f", Radius)
+		res, err := db.Query("SELECT id, ST_X(location),ST_Y(location), state " +
+			"FROM (" +
+			"SELECT id, location, state, r, " +
+			"units * DEGREES( ACOS( " +
+			"COS(RADIANS(latpoint)) " +
+			"* COS(RADIANS(ST_X(location))) " +
+			"* COS(RADIANS(longpoint) - RADIANS(ST_Y(location))) " +
+			"+ SIN(RADIANS(latpoint)) " +
+			"* SIN(RADIANS(ST_X(location))))) AS distance " +
+			"FROM fountains " +
+			"JOIN ( " +
+			"SELECT " + Latitude + "  AS latpoint,  " + Longitude + " AS longpoint," +
+			" " + Radius + " AS r, 111.045 AS units " +
+			") AS p ON (1=1) " +
+			"WHERE MbrContains(ST_GeomFromText( " +
+			"CONCAT('LINESTRING(', " +
+			"latpoint-(r/units),' ', " +
+			"longpoint-(r /(units* COS(RADIANS(latpoint)))), " +
+			"',', " +
+			"latpoint+(r/units) ,' ', " +
+			"longpoint+(r /(units * COS(RADIANS(latpoint)))), " +
+			"')')),  location) " +
+			") AS d " +
+			"WHERE d.distance <= d.r " +
+			"ORDER BY d.distance ASC;")
+		if err != nil {
+			panic(err.Error())
+		}
+		for res.Next() {
+			var fountain Fountain
+			err = res.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
+			if err != nil {
+				panic(err.Error())
+			}
+			got = append(got, fountain)
+		}
+	} else {
+		fmt.Println("Bad Input.\n Latitude range: [-90,90]\n Longitude range: [-180,180]\n State: [usable,faulty].")
+	}
+	return got
 }
 
 func updateStateDB(db *sql.DB, ID int, state string) bool {
