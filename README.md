@@ -3,8 +3,13 @@ Simulating JSON api to store and search nearest drinking fountains.
 
 ![golangversion](https://github.com/edoardottt/nason-api/blob/master/images/golang.svg)
 
-Here a typical drinking fountain in Rome([Nasone](https://en.wikipedia.org/wiki/Nasone))
+
+Here a typical drinking fountain in Rome
+
+([Nasone](https://en.wikipedia.org/wiki/Nasone))
+
 ![Nasone](https://github.com/edoardottt/nason-api/blob/master/images/nasone.JPG)
+
 
 Technologies used:
 
