@@ -17,3 +17,21 @@ Technologies used:
 2. [JSON-api](https://jsonapi.org/)
 3. [MySQL](https://www.mysql.com)
 4. [Postman](https://www.postman.com/)
+
+-------------------------------------------------
+DOWNLOAD 📡
+-------------------------------------------------
+
+GIT command on prompt: git -clone https://github.com/edoardottt/nason-api.git
+
+Download by Browser on: https://github.com/edoardottt/nason-api
+
+
+--------------------------
+If you liked it drop a :star:
+--------------------------
+
+https://www.edoardoottavianelli.it for contact me.
+
+
+      Edoardo Ottavianelli ©
