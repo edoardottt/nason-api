@@ -62,7 +62,7 @@ func respondingGet(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	input := search{}
 	err := json.Unmarshal(textBytes, &input)
 	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 	Latitude, Longitude, Radius := input.Latitude, input.Longitude, input.Radius
 	var got []Fountain = searchNearest(db, Latitude, Longitude, Radius)
