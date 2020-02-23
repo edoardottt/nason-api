@@ -79,16 +79,24 @@ func respondingDelete(w http.ResponseWriter, r *http.Request, input Fountain, db
 }
 
 func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
+	fountainFirst := selectDB(db, input.ID)
 	Err := updateStateDB(db, input.ID, input.State)
 	fountain := selectDB(db, input.ID)
+	if (Fountain{}) == fountainFirst { //If there isn't a record with that id, nothing happen.
+		Err = false
+	}
 	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
 
 func respondingPutLocation(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
+	fountainFirst := selectDB(db, input.ID)
 	Err := updateLocationDB(db, input.ID, input.Latitude, input.Longitude)
 	fountain := selectDB(db, input.ID)
+	if (Fountain{}) == fountainFirst { //If there isn't a record with that id, nothing happen.
+		Err = false
+	}
 	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
@@ -145,9 +153,6 @@ func selectDB(db *sql.DB, ID int) Fountain {
 	var fountain Fountain
 	fountains.Next()
 	err = fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
-	if err != nil {
-		panic(err.Error())
-	}
 	return fountain
 }
 
@@ -206,7 +211,7 @@ func updateStateDB(db *sql.DB, ID int, state string) bool {
 		stmt, err := db.Prepare("UPDATE fountains SET state = ? WHERE id=?;")
 		_, err = stmt.Exec(state, ID)
 		if err != nil {
-			panic(err.Error())
+			return false
 		}
 	} else {
 		fmt.Println("Bad Input.\n Latitude range: [-90,90]\n Longitude range: [-180,180]\n State: [usable,faulty].")
