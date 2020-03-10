@@ -55,7 +55,9 @@ type search struct {
 	Longitude float64
 	Radius    float64
 }
-
+/*---------------------------------------------------
+GET RESPONSE
+---------------------------------------------------*/
 func respondingGet(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	body, _ := ioutil.ReadAll(r.Body)
 	textBytes := []byte(body)
@@ -70,14 +72,18 @@ func respondingGet(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	b, _ := json.Marshal(fountains)
 	fmt.Fprintf(w, "%s", string(b))
 }
-
+/*---------------------------------------------------
+DELETE RESPONSE
+---------------------------------------------------*/
 func respondingDelete(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
 	Err, fountain := deleteDB(db, input.ID)
 	res := responseOne{Err, Fountain{fountain.ID, fountain.Latitude, fountain.Longitude, fountain.State}}
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
-
+/*---------------------------------------------------
+PUT RESPONSE 1 (STATE)
+---------------------------------------------------*/
 func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
 	fountainFirst := selectDB(db, input.ID)
 	Err := updateStateDB(db, input.ID, input.State)
@@ -89,7 +95,9 @@ func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, 
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
-
+/*---------------------------------------------------
+PUT RESPONSE 2 (LOCATION)
+---------------------------------------------------*/
 func respondingPutLocation(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
 	fountainFirst := selectDB(db, input.ID)
 	Err := updateLocationDB(db, input.ID, input.Latitude, input.Longitude)
@@ -101,7 +109,9 @@ func respondingPutLocation(w http.ResponseWriter, r *http.Request, input Fountai
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
-
+/*---------------------------------------------------
+FUNCTION UPDATE LOCATION DB
+---------------------------------------------------*/
 func updateLocationDB(db *sql.DB, ID int, lat float64, long float64) bool {
 	err := checkInputError(lat, long, "usable")
 	if err {
@@ -118,14 +128,18 @@ func updateLocationDB(db *sql.DB, ID int, lat float64, long float64) bool {
 	}
 	return true
 }
-
+/*---------------------------------------------------
+POST RESPONSE
+---------------------------------------------------*/
 func respondingPost(w http.ResponseWriter, r *http.Request, input Fountain, db *sql.DB) {
 	Err, i := insertDB(db, input.Latitude, input.Longitude, input.State)
 	res := responseOne{Err, Fountain{int(i), input.Latitude, input.Longitude, input.State}}
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
-
+/*---------------------------------------------------
+FUNCTION INSERT FOUNTAIN DB
+---------------------------------------------------*/
 func insertDB(db *sql.DB, lat float64, long float64, state string) (bool, int64) {
 	err := checkInputError(lat, long, state)
 	var result int64
@@ -144,7 +158,9 @@ func insertDB(db *sql.DB, lat float64, long float64, state string) (bool, int64)
 	}
 	return true, result
 }
-
+/*---------------------------------------------------
+FUNCTION SELECT LOCATION DB
+---------------------------------------------------*/
 func selectDB(db *sql.DB, ID int) Fountain {
 	fountains, err := db.Query("SELECT id, ST_X(location), ST_Y(location),state FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
 	if err != nil {
@@ -155,7 +171,9 @@ func selectDB(db *sql.DB, ID int) Fountain {
 	err = fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
 	return fountain
 }
-
+/*---------------------------------------------------
+FUNCTION SEARCH NEAREST FOUNTAINS DB
+---------------------------------------------------*/
 func searchNearest(db *sql.DB, Latitude float64, Longitude float64, Radius float64) []Fountain {
 	err := checkInputError(Latitude, Longitude, "usable")
 	got := []Fountain{}
@@ -204,7 +222,9 @@ func searchNearest(db *sql.DB, Latitude float64, Longitude float64, Radius float
 	}
 	return got
 }
-
+/*---------------------------------------------------
+FUNCTION UPDATE STATE DB
+---------------------------------------------------*/
 func updateStateDB(db *sql.DB, ID int, state string) bool {
 	err := checkInputError(0, 0, state)
 	if err {
@@ -219,7 +239,9 @@ func updateStateDB(db *sql.DB, ID int, state string) bool {
 	}
 	return true
 }
-
+/*---------------------------------------------------
+FUNCTION DELETE LOCATION DB
+---------------------------------------------------*/
 func deleteDB(db *sql.DB, ID int) (bool, Fountain) {
 	fountains, err := db.Query("SELECT id, ST_X(location), ST_Y(location),state FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
 	_, err = db.Query("DELETE FROM fountains WHERE id=" + strconv.Itoa(ID) + ";")
@@ -235,7 +257,9 @@ func deleteDB(db *sql.DB, ID int) (bool, Fountain) {
 		return true, fountain
 	}
 }
-
+/*---------------------------------------------------
+FUNCTION EXTRACT INPUT FROM REQUEST
+---------------------------------------------------*/
 func extractInput(w http.ResponseWriter, r *http.Request) Fountain {
 	body, _ := ioutil.ReadAll(r.Body)
 	textBytes := []byte(body)
@@ -246,7 +270,9 @@ func extractInput(w http.ResponseWriter, r *http.Request) Fountain {
 	}
 	return fountain
 }
-
+/*---------------------------------------------------
+FUNCTION CHECK INPUT ERRORS
+---------------------------------------------------*/
 func checkInputError(lat float64, long float64, state string) bool {
 	if lat < -90 || lat > 90 {
 		return false
@@ -259,7 +285,9 @@ func checkInputError(lat float64, long float64, state string) bool {
 	}
 	return true
 }
-
+/*---------------------------------------------------
+FUNCTION INIT ACCESS DB
+---------------------------------------------------*/
 func accessDB() *sql.DB {
 	fmt.Print("Enter password(root): ")
 	var password string
