@@ -55,6 +55,7 @@ type search struct {
 	Longitude float64
 	Radius    float64
 }
+
 /*---------------------------------------------------
 GET RESPONSE
 ---------------------------------------------------*/
@@ -72,6 +73,7 @@ func respondingGet(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	b, _ := json.Marshal(fountains)
 	fmt.Fprintf(w, "%s", string(b))
 }
+
 /*---------------------------------------------------
 DELETE RESPONSE
 ---------------------------------------------------*/
@@ -81,6 +83,7 @@ func respondingDelete(w http.ResponseWriter, r *http.Request, input Fountain, db
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
+
 /*---------------------------------------------------
 PUT RESPONSE 1 (STATE)
 ---------------------------------------------------*/
@@ -95,6 +98,7 @@ func respondingPutState(w http.ResponseWriter, r *http.Request, input Fountain, 
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
+
 /*---------------------------------------------------
 PUT RESPONSE 2 (LOCATION)
 ---------------------------------------------------*/
@@ -109,6 +113,7 @@ func respondingPutLocation(w http.ResponseWriter, r *http.Request, input Fountai
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
+
 /*---------------------------------------------------
 FUNCTION UPDATE LOCATION DB
 ---------------------------------------------------*/
@@ -128,6 +133,7 @@ func updateLocationDB(db *sql.DB, ID int, lat float64, long float64) bool {
 	}
 	return true
 }
+
 /*---------------------------------------------------
 POST RESPONSE
 ---------------------------------------------------*/
@@ -137,6 +143,7 @@ func respondingPost(w http.ResponseWriter, r *http.Request, input Fountain, db *
 	b, _ := json.Marshal(res)
 	fmt.Fprintf(w, "%s", string(b))
 }
+
 /*---------------------------------------------------
 FUNCTION INSERT FOUNTAIN DB
 ---------------------------------------------------*/
@@ -158,6 +165,7 @@ func insertDB(db *sql.DB, lat float64, long float64, state string) (bool, int64)
 	}
 	return true, result
 }
+
 /*---------------------------------------------------
 FUNCTION SELECT LOCATION DB
 ---------------------------------------------------*/
@@ -171,6 +179,7 @@ func selectDB(db *sql.DB, ID int) Fountain {
 	err = fountains.Scan(&fountain.ID, &fountain.Latitude, &fountain.Longitude, &fountain.State)
 	return fountain
 }
+
 /*---------------------------------------------------
 FUNCTION SEARCH NEAREST FOUNTAINS DB
 ---------------------------------------------------*/
@@ -222,6 +231,7 @@ func searchNearest(db *sql.DB, Latitude float64, Longitude float64, Radius float
 	}
 	return got
 }
+
 /*---------------------------------------------------
 FUNCTION UPDATE STATE DB
 ---------------------------------------------------*/
@@ -239,6 +249,7 @@ func updateStateDB(db *sql.DB, ID int, state string) bool {
 	}
 	return true
 }
+
 /*---------------------------------------------------
 FUNCTION DELETE LOCATION DB
 ---------------------------------------------------*/
@@ -257,6 +268,7 @@ func deleteDB(db *sql.DB, ID int) (bool, Fountain) {
 		return true, fountain
 	}
 }
+
 /*---------------------------------------------------
 FUNCTION EXTRACT INPUT FROM REQUEST
 ---------------------------------------------------*/
@@ -270,6 +282,7 @@ func extractInput(w http.ResponseWriter, r *http.Request) Fountain {
 	}
 	return fountain
 }
+
 /*---------------------------------------------------
 FUNCTION CHECK INPUT ERRORS
 ---------------------------------------------------*/
@@ -285,6 +298,7 @@ func checkInputError(lat float64, long float64, state string) bool {
 	}
 	return true
 }
+
 /*---------------------------------------------------
 FUNCTION INIT ACCESS DB
 ---------------------------------------------------*/
