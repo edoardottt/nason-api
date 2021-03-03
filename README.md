@@ -1,4 +1,7 @@
 # nason-api
+
+**TEST. ONLY BAD IMPLEMENTATIONS HERE**
+
 Simulating JSON api to store and search nearest drinking fountains.
 
 ![golangversion](https://github.com/edoardottt/nason-api/blob/master/images/golang.svg)
@@ -22,10 +25,7 @@ Technologies used:
 DOWNLOAD 📡
 -------------------------------------------------
 
-GIT command on prompt: git -clone https://github.com/edoardottt/nason-api.git
-
-Download by Browser on: https://github.com/edoardottt/nason-api
-
+- `git -clone https://github.com/edoardottt/nason-api.git`
 
 --------------------------
 If you liked it drop a :star:
@@ -34,4 +34,4 @@ If you liked it drop a :star:
 https://www.edoardoottavianelli.it for contact me.
 
 
-      Edoardo Ottavianelli ©
+                                                                  Edoardo Ottavianelli ©
