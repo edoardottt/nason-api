@@ -22,7 +22,7 @@ Technologies used:
 4. [Postman](https://www.postman.com/)
 
 
-DOWNLOAD 📡
+Download 📡
 ------
 
 - `git -clone https://github.com/edoardottt/nason-api.git`
