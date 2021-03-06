@@ -21,17 +21,17 @@ Technologies used:
 3. [MySQL](https://www.mysql.com)
 4. [Postman](https://www.postman.com/)
 
--------------------------------------------------
+
 DOWNLOAD 📡
--------------------------------------------------
+------
 
 - `git -clone https://github.com/edoardottt/nason-api.git`
 
---------------------------
+
 If you liked it drop a :star:
---------------------------
+------
 
 https://www.edoardoottavianelli.it for contact me.
 
 
-                                                                  Edoardo Ottavianelli ©
+                                                                  Edoardo Ottavianelli
