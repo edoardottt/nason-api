@@ -1,6 +1,4 @@
-# nason-api
-
-**TEST. ONLY BAD IMPLEMENTATIONS HERE**
+## ⚠️ This is a Test. Only bad practices here⚠️
 
 Simulating JSON api to store and search nearest drinking fountains.
 
