@@ -23,7 +23,7 @@ Technologies used:
 Download 📡
 ------
 
-- `git -clone https://github.com/edoardottt/nason-api.git`
+- `git clone https://github.com/edoardottt/nason-api.git`
 
 
 If you liked it drop a :star:
@@ -31,5 +31,4 @@ If you liked it drop a :star:
 
 https://www.edoardoottavianelli.it to contact me.
 
-
-                                                                  Edoardo Ottavianelli
+                                                                        Edoardo Ottavianelli
