@@ -1,4 +1,4 @@
-## ⚠️ This is a Test. Only bad practices here⚠️
+## ⚠️ This was a test. Only bad coding practices here⚠️
 
 Simulating JSON api to store and search nearest drinking fountains.
 
