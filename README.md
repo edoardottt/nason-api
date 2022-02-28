@@ -11,6 +11,12 @@ Here a typical drinking fountain in Rome
 
 ![Nasone](https://github.com/edoardottt/nason-api/blob/master/images/nasone.JPG)
 
+How to run:
+
+- `git clone https://github.com/edoardottt/nason-api.git`
+- `go get`
+- `go build -o nasonapi`
+- `./nasonapi`
 
 Technologies used:
 
@@ -20,15 +26,4 @@ Technologies used:
 4. [Postman](https://www.postman.com/)
 
 
-Download 📡
-------
-
-- `git clone https://github.com/edoardottt/nason-api.git`
-
-
-If you liked it drop a :star:
-------
-
 https://www.edoardoottavianelli.it to contact me.
-
-                                                                        Edoardo Ottavianelli
