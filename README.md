@@ -18,6 +18,8 @@ How to run:
 - `go build -o nasonapi`
 - `./nasonapi`
 
+The file [nason-api-collection.postman_collection.json](https://github.com/edoardottt/nason-api/blob/master/nason-api-collection.postman_collection.json) can be imported in Postman to test the APIs.
+
 Technologies used:
 
 1. [Go lang](https://golang.org/)
