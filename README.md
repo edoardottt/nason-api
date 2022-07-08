@@ -27,5 +27,6 @@ Technologies used:
 3. [MySQL](https://www.mysql.com)
 4. [Postman](https://www.postman.com/)
 
+--------
 
 [edoardoottavianelli.it](https://www.edoardoottavianelli.it) to contact me.
