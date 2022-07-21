@@ -13,10 +13,18 @@ Here a typical drinking fountain in Rome
 
 How to run:
 
-- `git clone https://github.com/edoardottt/nason-api.git`
-- `go get`
-- `go build -o nasonapi`
-- `./nasonapi`
+```bash
+git clone https://github.com/edoardottt/nason-api.git
+```
+```bash
+go get
+```
+```bash
+go build -o nasonapi
+```
+```bash
+./nasonapi
+```
 
 The file [nason-api-collection.postman_collection.json](https://github.com/edoardottt/nason-api/blob/master/nason-api-collection.postman_collection.json) can be imported in Postman to test the APIs.
 
