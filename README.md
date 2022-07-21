@@ -28,13 +28,6 @@ go build -o nasonapi
 
 The file [nason-api-collection.postman_collection.json](https://github.com/edoardottt/nason-api/blob/master/nason-api-collection.postman_collection.json) can be imported in Postman to test the APIs.
 
-Technologies used:
-
-1. [Go lang](https://golang.org/)
-2. [JSON-api](https://jsonapi.org/)
-3. [MySQL](https://www.mysql.com)
-4. [Postman](https://www.postman.com/)
-
 --------
 
 [edoardoottavianelli.it](https://www.edoardoottavianelli.it) to contact me.
