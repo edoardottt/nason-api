@@ -13,16 +13,16 @@ Here a typical drinking fountain in Rome
 
 How to run:
 
-```bash
+```console
 git clone https://github.com/edoardottt/nason-api.git
 ```
-```bash
+```console
 go get
 ```
-```bash
+```console
 go build -o nasonapi
 ```
-```bash
+```console
 ./nasonapi
 ```
 
