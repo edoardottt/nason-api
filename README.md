@@ -30,4 +30,4 @@ The file [nason-api-collection.postman_collection.json](https://github.com/edoar
 
 --------
 
-[edoardoottavianelli.it](https://www.edoardoottavianelli.it) to contact me.
+[edoardottt.com](https://edoardottt.com/) to contact me.
